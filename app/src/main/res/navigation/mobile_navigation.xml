@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home"> <fragment
+    android:id="@+id/navigation_home"
+    android:name="com.example.reventa.ui.home.HomeFragment"
+    android:label="home"
+    tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_explore"
+        android:name="com.example.reventa.ui.explore.ExploreFragment"
+        android:label="Explore"
+        tools:layout="@layout/fragment_explore" />
+
+    <fragment
+        android:id="@+id/navigation_sell"
+        android:name="com.example.reventa.ui.sell.SellFragment"
+        android:label="Sell"
+        tools:layout="@layout/fragment_sell" />
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.reventa.ui.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login" />
+
+</navigation>
