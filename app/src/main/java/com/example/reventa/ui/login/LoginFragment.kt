@@ -1,6 +1,5 @@
 package com.example.reventa.ui.login
 
-import LoginViewModelFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,9 +17,9 @@ import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
-    // Conectamos el ViewModel al Fragmento
+    // Conectamos el ViewModel al Fragmento pasándole el contexto al Factory
     private val viewModel: LoginViewModel by viewModels {
-        LoginViewModelFactory()
+        LoginViewModelFactory(requireContext())
     }
 
     override fun onCreateView(
@@ -52,12 +51,11 @@ class LoginFragment : Fragment() {
                     }
                     is LoginState.Success -> {
                         progressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "¡Bienvenido!", Toast.LENGTH_SHORT).show()
 
-                        // Reiniciamos el estado por si volvemos a esta pantalla en el futuro
+                        // CAMBIAMOS EL TOAST PARA QUE NOS CHIVE EL TOKEN:
+                        Toast.makeText(requireContext(), "Token: ${estado.token}", Toast.LENGTH_LONG).show()
+
                         viewModel.resetState()
-
-                        // Navegamos al Home
                         findNavController().navigate(R.id.navigation_home)
                     }
                     is LoginState.Error -> {

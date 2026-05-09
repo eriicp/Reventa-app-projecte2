@@ -6,22 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels // ¡Asegúrate de tener este import!
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reventa.databinding.FragmentExploreBinding
-import com.example.reventa.model.CategoriaEvento
 
 class ExploreFragment : Fragment() {
 
     private var _binding: FragmentExploreBinding? = null
     private val binding get() = _binding!!
     private lateinit var exploreAdapter: ExploreAdapter
-    private lateinit var exploreViewModel: ExploreViewModel
+
+    // 1. EL CAMBIO ESTÁ AQUÍ: Instanciamos el ViewModel usando el Factory y el contexto
+    private val exploreViewModel: ExploreViewModel by viewModels {
+        ExploreViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        exploreViewModel = ViewModelProvider(this).get(ExploreViewModel::class.java)
+        // 2. YA NO NECESITAMOS LA LÍNEA DEL ViewModelProvider AQUÍ
         _binding = FragmentExploreBinding.inflate(inflater, container, false)
 
         setupRecyclerView()

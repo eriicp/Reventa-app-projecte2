@@ -4,35 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.reventa.databinding.FragmentSellBinding
 
 class SellFragment : Fragment() {
 
     private var _binding: FragmentSellBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    // Esta propiedad solo es válida entre onCreateView y onDestroyView
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(SellViewModel::class.java)
-
+        // Inflamos el XML que me acabas de pasar (asegúrate de que se llame fragment_sell.xml)
         _binding = FragmentSellBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        val textView: TextView = binding.textNotifications
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        // Aquí luego le daremos vida a los botones, por ejemplo:
+        // binding.cvTickets.setOnClickListener { ... }
+
+        return binding.root
     }
 
     override fun onDestroyView() {

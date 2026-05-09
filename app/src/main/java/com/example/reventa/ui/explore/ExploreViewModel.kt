@@ -4,19 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.reventa.api.ItemAPI
-import com.example.reventa.model.CategoriaEvento
+import com.example.reventa.api.ApiService
 import com.example.reventa.model.Evento
 import kotlinx.coroutines.launch
 
-class ExploreViewModel : ViewModel() {
+class ExploreViewModel(private val apiService: ApiService) : ViewModel() {
 
     private val _eventos = MutableLiveData<List<Evento>>()
     val eventos: LiveData<List<Evento>> = _eventos
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
-
 
     init {
         fetchEvents() // Carga inicial (Todas)
@@ -25,9 +23,11 @@ class ExploreViewModel : ViewModel() {
     fun fetchEvents() {
         viewModelScope.launch {
             try {
-                val response = ItemAPI.API().findEvents()
+                val response = apiService.findEvents()
                 if (response.isSuccessful) {
                     _eventos.value = response.body() ?: emptyList()
+                } else {
+                    _error.postValue("Error del servidor: Código ${response.code()}")
                 }
             } catch (e: Exception) {
                 _error.postValue("Fallo de red: ${e.message}")
@@ -35,11 +35,11 @@ class ExploreViewModel : ViewModel() {
         }
     }
 
-    // NUEVA FUNCIÓN PARA FILTRAR
     fun fetchEventsByCategory(categoria: String) {
         viewModelScope.launch {
             try {
-                val response = ItemAPI.API().findEventsByCategory(categoria)
+                // USAMOS EL apiService INYECTADO
+                val response = apiService.findEventsByCategory(categoria)
                 if (response.isSuccessful) {
                     _eventos.value = response.body() ?: emptyList()
                 } else {

@@ -11,7 +11,6 @@ class AuthRepository(private val userPreferences: UserPreferences) {
         !token.isNullOrEmpty()
     }
 
-    // 👇 ¡ESTA ES LA FUNCIÓN QUE FALTABA! 👇
     suspend fun guardarToken(token: String) {
         userPreferences.saveToken(token)
     }
