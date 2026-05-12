@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import com.example.reventa.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -23,11 +22,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 1. LEEMOS EL TOKEN
         val userPreferences = UserPreferences(this)
         lifecycleScope.launch {
             userPreferences.userToken.collect { token ->
-                // Por si acaso Retrofit guardó la palabra "null" por error
                 isUserLoggedIn = !token.isNullOrEmpty() && token != "null"
             }
         }
@@ -37,31 +34,52 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController = navHostFragment.navController
 
-        // 2. Android gestiona los clics e iconos automáticamente (sin conflictos)
-        navView.setupWithNavController(navController)
+        // LAS REGLAS DE ORO (Evitan el efecto cebolla y duplicar pantallas)
+        val opcionesNavegacion = NavOptions.Builder()
+            .setLaunchSingleTop(true) // Si ya estoy en la pantalla, NO abras otra
+            .setPopUpTo(R.id.navigation_home, false) // El Home siempre es la base
+            .build()
 
-        // 3. EL VIGILANTE: Intercepta cada navegación
+        // 1. GESTIONAMOS LOS CLICS DEL MENÚ MANUALMENTE (Adiós al piloto automático)
+        navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    navController.navigate(R.id.navigation_home, null, opcionesNavegacion)
+                    true
+                }
+                R.id.navigation_explore -> {
+                    navController.navigate(R.id.navigation_explore, null, opcionesNavegacion)
+                    true
+                }
+                R.id.navigation_sell -> {
+                    if (!isUserLoggedIn) {
+                        navController.navigate(R.id.loginFragment)
+                        false // Devolvemos false para que el icono de Vender NO se quede iluminado
+                    } else {
+                        navController.navigate(R.id.navigation_sell, null, opcionesNavegacion)
+                        true
+                    }
+                }
+                else -> false
+            }
+        }
+
+        // 2. EL VIGILANTE: Se asegura de ocultar el menú en el login y de iluminar el icono correcto
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
-            // Ocultar el menú de abajo si estamos en la pantalla de Login
+            // Mostrar/Ocultar el menú inferior
             if (destination.id == R.id.loginFragment) {
                 navView.visibility = View.GONE
             } else {
                 navView.visibility = View.VISIBLE
             }
 
-            // SEGURIDAD: Proteger la pestaña de Vender
-            if (destination.id == R.id.navigation_sell) {
-                if (!isUserLoggedIn) {
-                    // Si no está logueado, lo mandamos al Login rebotado
-                    navController.navigate(
-                        R.id.loginFragment,
-                        null,
-                        NavOptions.Builder()
-                            .setPopUpTo(R.id.navigation_home, false) // Si le da "Atrás", va al Home
-                            .build()
-                    )
-                }
+            // MAGIA: Si viajamos a Explore desde una tarjeta del Home, esto hace que
+            // el icono de Explore de abajo se ilumine automáticamente.
+            when (destination.id) {
+                R.id.navigation_home -> navView.menu.findItem(R.id.navigation_home).isChecked = true
+                R.id.navigation_explore -> navView.menu.findItem(R.id.navigation_explore).isChecked = true
+                R.id.navigation_sell -> navView.menu.findItem(R.id.navigation_sell).isChecked = true
             }
         }
     }

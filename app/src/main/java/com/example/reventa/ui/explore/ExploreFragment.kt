@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels // ¡Asegúrate de tener este import!
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reventa.databinding.FragmentExploreBinding
 
@@ -16,7 +16,6 @@ class ExploreFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var exploreAdapter: ExploreAdapter
 
-    // 1. EL CAMBIO ESTÁ AQUÍ: Instanciamos el ViewModel usando el Factory y el contexto
     private val exploreViewModel: ExploreViewModel by viewModels {
         ExploreViewModelFactory(requireContext())
     }
@@ -24,13 +23,11 @@ class ExploreFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // 2. YA NO NECESITAMOS LA LÍNEA DEL ViewModelProvider AQUÍ
         _binding = FragmentExploreBinding.inflate(inflater, container, false)
 
         setupRecyclerView()
         setupChips()
 
-        // Observar cambios en la lista de eventos
         exploreViewModel.eventos.observe(viewLifecycleOwner) { listaEventos ->
             exploreAdapter.submitList(listaEventos)
         }
@@ -42,26 +39,33 @@ class ExploreFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // 1. Miramos si traemos alguna categoría
+        val categoriaSeleccionada = arguments?.getString("CATEGORIA")
+
+        // 2. ¡EL TRUCO ANTIFANTASMAS! Borramos el dato inmediatamente después de leerlo.
+        // Así, si el usuario vuelve a entrar usando el menú de abajo, la mochila estará vacía.
+        arguments?.remove("CATEGORIA")
+
+        // 3. Lógica visual
+        when (categoriaSeleccionada) {
+            "Música" -> binding.chipMusic.isChecked = true
+            "Deportes" -> binding.chipSports.isChecked = true
+            "Festivales" -> binding.chipFestival.isChecked = true
+            null -> binding.chipAll.isChecked = true
+        }
+
+        // 4. Llamada a la API
+        exploreViewModel.cargarEventosIniciales(categoriaSeleccionada)
+    }
+
     private fun setupChips() {
-        // Chip "Todas"
-        binding.chipAll.setOnClickListener {
-            exploreViewModel.fetchEvents()
-        }
-
-        // Chip "Música" -> CONCIERTO o FESTIVAL (ajusta según tu lógica)
-        binding.chipMusic.setOnClickListener {
-            exploreViewModel.fetchEventsByCategory("concierto")
-        }
-
-        // Chip "Deportes" -> DEPORTE
-        binding.chipSports.setOnClickListener {
-            exploreViewModel.fetchEventsByCategory("deporte")
-        }
-
-        // Chip "Festivales" -> FESTIVAL
-        binding.chipFestival.setOnClickListener {
-            exploreViewModel.fetchEventsByCategory("festival")
-        }
+        binding.chipAll.setOnClickListener { exploreViewModel.fetchEvents() }
+        binding.chipMusic.setOnClickListener { exploreViewModel.fetchEventsByCategory("concierto") }
+        binding.chipSports.setOnClickListener { exploreViewModel.fetchEventsByCategory("deporte") }
+        binding.chipFestival.setOnClickListener { exploreViewModel.fetchEventsByCategory("festival") }
     }
 
     private fun setupRecyclerView() {

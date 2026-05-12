@@ -16,8 +16,17 @@ class ExploreViewModel(private val apiService: ApiService) : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    init {
-        fetchEvents() // Carga inicial (Todas)
+    // ¡ELIMINADO EL init{} PARA NO HACER DOBLE LLAMADA!
+
+    // NUEVA FUNCIÓN: Decide qué datos cargar al abrir la pantalla
+    fun cargarEventosIniciales(categoriaHome: String?) {
+        when (categoriaHome) {
+            "Música" -> fetchEventsByCategory("concierto")
+            "Deportes" -> fetchEventsByCategory("deporte")
+            "Festivales" -> fetchEventsByCategory("festival")
+            "Teatro" -> fetchEventsByCategory("teatro")
+            else -> fetchEvents() // Si es nulo (venimos del menú normal), carga todas
+        }
     }
 
     fun fetchEvents() {
@@ -38,7 +47,6 @@ class ExploreViewModel(private val apiService: ApiService) : ViewModel() {
     fun fetchEventsByCategory(categoria: String) {
         viewModelScope.launch {
             try {
-                // USAMOS EL apiService INYECTADO
                 val response = apiService.findEventsByCategory(categoria)
                 if (response.isSuccessful) {
                     _eventos.value = response.body() ?: emptyList()

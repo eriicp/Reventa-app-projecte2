@@ -79,6 +79,7 @@ dependencies {
     // MAS
     implementation("androidx.activity:activity-ktx:1.8.2") // <--- AÑADE ESTA
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("com.stripe:stripe-android:20.35.0")
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     coreLibraryDesugaring ("com.android.tools:desugar_jdk_libs:2.0.4")

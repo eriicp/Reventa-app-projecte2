@@ -21,4 +21,8 @@ interface ApiService {
     suspend fun searchEventos(@Query("nombre") query: String): Response<List<Evento>>
 
     @POST("api/auth/login")
-    suspend fun login(@Body request: LoginRequest): Response<JwtResponse>}
+    suspend fun login(@Body request: LoginRequest): Response<JwtResponse>
+
+    @GET("api/eventos/proximos")
+    suspend fun getProximosEventos(): Response<List<Evento>>
+}
