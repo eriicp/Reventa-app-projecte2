@@ -33,8 +33,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SearchView
-        android:id="@+id/svExplore"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
@@ -43,6 +43,7 @@
         android:queryHint="Busca artistas o eventos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:iconifiedByDefault="false"
         app:layout_constraintTop_toBottomOf="@+id/text_home" />
 
     <HorizontalScrollView
@@ -52,7 +53,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="12dp"
         android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@+id/svExplore">
+        app:layout_constraintTop_toBottomOf="@+id/searchView">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/categoryChipGroup"

@@ -34,6 +34,7 @@ class HomeFragment : Fragment() {
 
         setupRecyclerView()
         observarViewModel()
+        setupBuscadorRedireccion()
 
         return binding.root
     }
@@ -83,5 +84,15 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setupBuscadorRedireccion() {
+        binding.searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.searchView.clearFocus()
+
+                findNavController().navigate(R.id.navigation_explore)
+            }
+        }
     }
 }

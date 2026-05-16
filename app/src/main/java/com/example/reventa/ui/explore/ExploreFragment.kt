@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,7 @@ class ExploreFragment : Fragment() {
 
         setupRecyclerView()
         setupChips()
+        setupSearchView()
 
         exploreViewModel.eventos.observe(viewLifecycleOwner) { listaEventos ->
             exploreAdapter.submitList(listaEventos)
@@ -34,6 +36,10 @@ class ExploreFragment : Fragment() {
 
         exploreViewModel.error.observe(viewLifecycleOwner) { mensaje ->
             Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show()
+        }
+
+        exploreViewModel.eventos.observe(viewLifecycleOwner) { nuevaListaDeEventos ->
+            exploreAdapter.submitList(nuevaListaDeEventos)
         }
 
         return binding.root
@@ -59,8 +65,33 @@ class ExploreFragment : Fragment() {
 
         // 4. Llamada a la API
         exploreViewModel.cargarEventosIniciales(categoriaSeleccionada)
-    }
 
+
+    }
+    private fun setupSearchView() {
+            binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+                // Se ejecuta cuando el usuario le da a la "Lupa" o al "Enter" en el teclado
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (!query.isNullOrBlank()) {
+                        exploreViewModel.buscarEventosPorNombre(query)
+                    }
+                    // Esconder el teclado tras buscar
+                    binding.searchView.clearFocus()
+                    return true
+                }
+
+                // Se ejecuta cada vez que el usuario teclea o borra una letra
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (!newText.isNullOrBlank()) {
+                        exploreViewModel.buscarEventosPorNombre(newText)
+                    } else {
+                        exploreViewModel.cargarEventosIniciales(null)
+                    }
+                    return true
+                }
+            })
+    }
     private fun setupChips() {
         binding.chipAll.setOnClickListener { exploreViewModel.fetchEvents() }
         binding.chipMusic.setOnClickListener { exploreViewModel.fetchEventsByCategory("concierto") }

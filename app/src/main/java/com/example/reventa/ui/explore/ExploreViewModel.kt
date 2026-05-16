@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.reventa.api.ApiService
 import com.example.reventa.model.Evento
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ExploreViewModel(private val apiService: ApiService) : ViewModel() {
@@ -15,6 +17,8 @@ class ExploreViewModel(private val apiService: ApiService) : ViewModel() {
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
+
+    private var searchJob: Job? = null
 
     // ¡ELIMINADO EL init{} PARA NO HACER DOBLE LLAMADA!
 
@@ -55,6 +59,31 @@ class ExploreViewModel(private val apiService: ApiService) : ViewModel() {
                 }
             } catch (e: Exception) {
                 _error.postValue("Error al filtrar: ${e.message}")
+            }
+        }
+    }
+
+    fun buscarEventosPorNombre(query: String) {
+        // 1. Si el usuario sigue escribiendo, cancelamos la búsqueda anterior
+        searchJob?.cancel()
+
+        // 2. Creamos una nueva búsqueda
+        searchJob = viewModelScope.launch {
+            // 3. ¡EL TRUCO MAGISTRAL! Esperamos 500 milisegundos.
+            // Si el usuario escribe otra letra antes de medio segundo, esto se cancela.
+            delay(500)
+
+            try {
+                // Llamamos al endpoint que ya tienes en tu ApiService
+                val response = apiService.searchEventos(query)
+                if (response.isSuccessful) {
+                    // Actualizamos la lista del RecyclerView
+                    _eventos.value = response.body() ?: emptyList()
+                } else {
+                    _error.postValue("No se encontraron resultados")
+                }
+            } catch (e: Exception) {
+                _error.postValue("Error de conexión: ${e.message}")
             }
         }
     }
