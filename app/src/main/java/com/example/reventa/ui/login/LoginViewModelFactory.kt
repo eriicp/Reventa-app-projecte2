@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.reventa.api.ItemAPI
 import com.example.reventa.api.auth.AuthRepository
-import UserPreferences
+import com.example.reventa.api.auth.UserPreferences
 
 class LoginViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")

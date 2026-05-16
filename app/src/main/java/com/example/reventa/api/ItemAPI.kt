@@ -1,8 +1,8 @@
 package com.example.reventa.api
 
-import UserPreferences
 import android.content.Context
 import com.example.reventa.api.auth.AuthInterceptor
+import com.example.reventa.api.auth.UserPreferences
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

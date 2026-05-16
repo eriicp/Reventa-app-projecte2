@@ -2,12 +2,12 @@ package com.example.reventa.model
 
 // Lo que enviamos a la API
 data class LoginRequest(
-    val username: String, // Ojo: en tu backend, este campo recibe el email
+    val username: String,
     val password: String
 )
 
-// Lo que recibimos de la API
-data class JwtResponse(
-    val token: String
+data class LoginResponse(
+    val token: String,
+    val idUsuario: Long
 )
 

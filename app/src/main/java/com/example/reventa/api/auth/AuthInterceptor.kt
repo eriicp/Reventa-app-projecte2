@@ -1,6 +1,5 @@
 package com.example.reventa.api.auth
 
-import UserPreferences
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

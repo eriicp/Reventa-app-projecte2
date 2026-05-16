@@ -1,12 +1,12 @@
 package com.example.reventa
 
-import UserPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
+import com.example.reventa.api.auth.UserPreferences
 import com.example.reventa.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.stripe.android.PaymentConfiguration
@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         // 1. GESTIONAMOS LOS CLICS DEL MENÚ MANUALMENTE (Adiós al piloto automático)
+        // 1. GESTIONAMOS LOS CLICS DEL MENÚ MANUALMENTE (Adiós al piloto automático)
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
@@ -62,9 +63,21 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_sell -> {
                     if (!isUserLoggedIn) {
                         navController.navigate(R.id.loginFragment)
-                        false // Devolvemos false para que el icono de Vender NO se quede iluminado
+                        false // Devolvemos false para que el icono NO se quede iluminado
                     } else {
                         navController.navigate(R.id.navigation_sell, null, opcionesNavegacion)
+                        true
+                    }
+                }
+                // ¡AQUÍ ESTÁ EL BLOQUE QUE TE FALTABA!
+                R.id.navigation_profile -> {
+                    if (!isUserLoggedIn) {
+                        // Si no hay sesión, al login
+                        navController.navigate(R.id.loginFragment)
+                        false
+                    } else {
+                        // Si hay sesión, entramos al perfil
+                        navController.navigate(R.id.navigation_profile, null, opcionesNavegacion)
                         true
                     }
                 }
@@ -88,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home -> navView.menu.findItem(R.id.navigation_home).isChecked = true
                 R.id.navigation_explore -> navView.menu.findItem(R.id.navigation_explore).isChecked = true
                 R.id.navigation_sell -> navView.menu.findItem(R.id.navigation_sell).isChecked = true
+                R.id.navigation_profile -> navView.menu.findItem(R.id.navigation_profile).isChecked = true
             }
         }
     }

@@ -1,12 +1,11 @@
 package com.example.reventa.ui.payment
 
-import UserPreferences
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.reventa.api.ItemAPI
 import com.example.reventa.api.auth.AuthRepository
-import com.example.reventa.ui.login.LoginViewModel
+import com.example.reventa.api.auth.UserPreferences
 
 class PaymentViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

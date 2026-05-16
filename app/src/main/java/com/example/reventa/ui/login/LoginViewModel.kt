@@ -27,11 +27,14 @@ class LoginViewModel(
                 val response = apiService.login(peticion)
 
                 if (response.isSuccessful && response.body() != null) {
-                    val token = response.body()!!.token
-                    authRepository.guardarToken(token)
+                    val loginResponse = response.body()!!
 
-                    // AHORA LE PASAMOS EL TOKEN A LA VISTA
-                    _loginState.value = LoginState.Success(token)
+                    // 2. Guardamos AMBOS datos en SharedPreferences (DataStore)
+                    authRepository.saveAuthData(loginResponse.token, loginResponse.idUsuario)
+
+                    // 3. Avisamos a la pantalla de que ha sido un éxito
+                    _loginState.value = LoginState.Success(loginResponse.token)
+
                 } else {
                     _loginState.value = LoginState.Error("Credenciales incorrectas")
                 }

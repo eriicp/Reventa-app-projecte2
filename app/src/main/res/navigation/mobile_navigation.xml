@@ -27,4 +27,10 @@
         android:label="Login"
         tools:layout="@layout/fragment_login" />
 
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.reventa.ui.profile.ProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>
