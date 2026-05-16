@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reventa.model.Evento
 import com.example.reventa.R
 
-class ExploreAdapter : RecyclerView.Adapter<ExploreViewHolder>() {
+// 1. Añadimos el onClick al constructor (y borramos el import falso de arriba)
+class ExploreAdapter(
+    private val onClick: (Evento) -> Unit
+) : RecyclerView.Adapter<ExploreViewHolder>() {
 
     private var eventos = listOf<Evento>()
 
@@ -21,7 +24,13 @@ class ExploreAdapter : RecyclerView.Adapter<ExploreViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ExploreViewHolder, position: Int) {
-        holder.bind(eventos[position])
+        val evento = eventos[position]
+        holder.bind(evento)
+
+        // 2. Le decimos a toda la fila (tarjeta) que escuche el clic
+        holder.itemView.setOnClickListener {
+            onClick(evento) // Ejecutamos la acción pasándole el evento
+        }
     }
 
     override fun getItemCount() = eventos.size

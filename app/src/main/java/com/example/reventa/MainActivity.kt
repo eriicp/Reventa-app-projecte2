@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                 }
-                // ¡AQUÍ ESTÁ EL BLOQUE QUE TE FALTABA!
                 R.id.navigation_profile -> {
                     if (!isUserLoggedIn) {
                         // Si no hay sesión, al login
@@ -102,6 +101,19 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_explore -> navView.menu.findItem(R.id.navigation_explore).isChecked = true
                 R.id.navigation_sell -> navView.menu.findItem(R.id.navigation_sell).isChecked = true
                 R.id.navigation_profile -> navView.menu.findItem(R.id.navigation_profile).isChecked = true
+            }
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                // Pantallas donde NO queremos menú inferior
+                R.id.paymentFragment, R.id.loginFragment -> {
+                    binding.navView.visibility = View.GONE
+                }
+                // En el resto de pantallas (Home, Explore, Sell, Profile, Tickets) SÍ lo mostramos
+                else -> {
+                    binding.navView.visibility = View.VISIBLE
+                }
             }
         }
     }

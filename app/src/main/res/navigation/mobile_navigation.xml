@@ -33,4 +33,26 @@
         android:label="Perfil"
         tools:layout="@layout/fragment_profile" />
 
+    <fragment
+        android:id="@+id/ticketsFragment"
+        android:name="com.example.reventa.ui.tickets.TicketsFragment"
+        android:label="Entradas Disponibles"
+        tools:layout="@layout/fragment_tickets" />
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.reventa.ui.payment.PaymentFragment"
+        android:label="Pago"
+        tools:layout="@layout/fragment_payment">
+
+        <argument
+            android:name="idTicket"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="precioTicket"
+            app:argType="float"
+            android:defaultValue="0.0F" />
+    </fragment>
+
 </navigation>

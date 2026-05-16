@@ -7,6 +7,7 @@ import com.example.reventa.model.LoginRequest
 import com.example.reventa.model.LoginResponse
 import com.example.reventa.model.PaymentRequest
 import com.example.reventa.model.PaymentResponse
+import com.example.reventa.model.Ticket
 import com.example.reventa.model.UsuarioDto
 
 interface ApiService {
@@ -33,4 +34,9 @@ interface ApiService {
 
     @GET("api/usuarios/{id}")
     suspend fun getPerfilUsuario(@Path("id") idUsuario: Long): Response<UsuarioDto>
+
+    @GET("api/entradas/evento/{idEvento}")
+    suspend fun getTicketsPorEvento(
+        @Path("idEvento") idEvento: Long
+    ): Response<List<Ticket>>
 }

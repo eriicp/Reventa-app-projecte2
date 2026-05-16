@@ -8,7 +8,9 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController // <-- IMPORTANTE
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.reventa.R // <-- IMPORTANTE
 import com.example.reventa.databinding.FragmentExploreBinding
 
 class ExploreFragment : Fragment() {
@@ -25,37 +27,26 @@ class ExploreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentExploreBinding.inflate(inflater, container, false)
-
-        setupRecyclerView()
-        setupChips()
-        setupSearchView()
-
-        exploreViewModel.eventos.observe(viewLifecycleOwner) { listaEventos ->
-            exploreAdapter.submitList(listaEventos)
-        }
-
-        exploreViewModel.error.observe(viewLifecycleOwner) { mensaje ->
-            Toast.makeText(context, mensaje, Toast.LENGTH_SHORT).show()
-        }
-
-        exploreViewModel.eventos.observe(viewLifecycleOwner) { nuevaListaDeEventos ->
-            exploreAdapter.submitList(nuevaListaDeEventos)
-        }
-
         return binding.root
     }
 
+    // AQUI ES DONDE DEBE IR TODA LA LÓGICA
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Miramos si traemos alguna categoría
+        // 1. Configuramos la vista
+        setupRecyclerView()
+        setupChips()
+        setupSearchView()
+        setupObservers()
+
+        // 2. Miramos si traemos alguna categoría
         val categoriaSeleccionada = arguments?.getString("CATEGORIA")
 
-        // 2. ¡EL TRUCO ANTIFANTASMAS! Borramos el dato inmediatamente después de leerlo.
-        // Así, si el usuario vuelve a entrar usando el menú de abajo, la mochila estará vacía.
+        // 3. ¡EL TRUCO ANTIFANTASMAS! Borramos el dato
         arguments?.remove("CATEGORIA")
 
-        // 3. Lógica visual
+        // 4. Lógica visual de los chips
         when (categoriaSeleccionada) {
             "Música" -> binding.chipMusic.isChecked = true
             "Deportes" -> binding.chipSports.isChecked = true
@@ -63,35 +54,44 @@ class ExploreFragment : Fragment() {
             null -> binding.chipAll.isChecked = true
         }
 
-        // 4. Llamada a la API
+        // 5. Llamada inicial a la API
         exploreViewModel.cargarEventosIniciales(categoriaSeleccionada)
-
-
     }
+
+    private fun setupObservers() {
+        // Observador limpio (sin duplicar)
+        exploreViewModel.eventos.observe(viewLifecycleOwner) { listaEventos ->
+            // Si usas el adaptador tradicional, es actualizarLista.
+            // Si usas ListAdapter, cámbialo de nuevo a submitList.
+            exploreAdapter.submitList(listaEventos)
+        }
+
+        exploreViewModel.error.observe(viewLifecycleOwner) { mensaje ->
+            Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun setupSearchView() {
-            binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-                // Se ejecuta cuando el usuario le da a la "Lupa" o al "Enter" en el teclado
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    if (!query.isNullOrBlank()) {
-                        exploreViewModel.buscarEventosPorNombre(query)
-                    }
-                    // Esconder el teclado tras buscar
-                    binding.searchView.clearFocus()
-                    return true
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrBlank()) {
+                    exploreViewModel.buscarEventosPorNombre(query)
                 }
+                binding.searchView.clearFocus()
+                return true
+            }
 
-                // Se ejecuta cada vez que el usuario teclea o borra una letra
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (!newText.isNullOrBlank()) {
-                        exploreViewModel.buscarEventosPorNombre(newText)
-                    } else {
-                        exploreViewModel.cargarEventosIniciales(null)
-                    }
-                    return true
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (!newText.isNullOrBlank()) {
+                    exploreViewModel.buscarEventosPorNombre(newText)
+                } else {
+                    exploreViewModel.cargarEventosIniciales(null)
                 }
-            })
+                return true
+            }
+        })
     }
+
     private fun setupChips() {
         binding.chipAll.setOnClickListener { exploreViewModel.fetchEvents() }
         binding.chipMusic.setOnClickListener { exploreViewModel.fetchEventsByCategory("concierto") }
@@ -100,7 +100,14 @@ class ExploreFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        exploreAdapter = ExploreAdapter()
+        exploreAdapter = ExploreAdapter { eventoClicado ->
+            val paquete = Bundle().apply {
+                putLong("idEvento", eventoClicado.idEvento)
+                putString("nombreEvento", eventoClicado.nombre)
+            }
+            findNavController().navigate(R.id.ticketsFragment, paquete)
+        }
+
         binding.rvExplore.apply {
             adapter = exploreAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

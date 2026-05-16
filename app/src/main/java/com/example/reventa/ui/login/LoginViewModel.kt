@@ -23,20 +23,17 @@ class LoginViewModel(
         viewModelScope.launch {
             try {
                 // 1. Llamamos a TU Retrofit (ApiService)
-                val peticion = LoginRequest(username = email, password = contrasena)
+                val peticion = LoginRequest(email = email, password = contrasena)
                 val response = apiService.login(peticion)
 
                 if (response.isSuccessful && response.body() != null) {
                     val loginResponse = response.body()!!
-
-                    // 2. Guardamos AMBOS datos en SharedPreferences (DataStore)
                     authRepository.saveAuthData(loginResponse.token, loginResponse.idUsuario)
-
-                    // 3. Avisamos a la pantalla de que ha sido un éxito
                     _loginState.value = LoginState.Success(loginResponse.token)
-
                 } else {
-                    _loginState.value = LoginState.Error("Credenciales incorrectas")
+                    val errorBody = response.errorBody()?.string()
+                    println("❌ ERROR DE LOGIN: Código ${response.code()} - $errorBody")
+                    _loginState.value = LoginState.Error("Fallo al iniciar sesión: Código ${response.code()}")
                 }
             } catch (e: Exception) {
                 _loginState.value = LoginState.Error("Error de red: ${e.message}")

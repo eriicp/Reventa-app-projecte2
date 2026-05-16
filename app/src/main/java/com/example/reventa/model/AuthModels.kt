@@ -2,7 +2,7 @@ package com.example.reventa.model
 
 // Lo que enviamos a la API
 data class LoginRequest(
-    val username: String,
+    val email: String,
     val password: String
 )
 

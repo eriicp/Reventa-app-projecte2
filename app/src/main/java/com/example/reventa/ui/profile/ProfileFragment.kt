@@ -86,6 +86,14 @@ class ProfileFragment : Fragment() {
                 findNavController().navigate(R.id.navigation_profile)
             }
         }
+        // Si el logout es correcto, mandamos al Home
+        profileViewModel.logoutExitoso.observe(viewLifecycleOwner) { exitoso ->
+            if (exitoso) {
+                Toast.makeText(requireContext(), "Sesión cerrada", Toast.LENGTH_SHORT).show()
+
+                findNavController().navigate(R.id.navigation_home)
+            }
+        }
     }
 
     override fun onDestroyView() {

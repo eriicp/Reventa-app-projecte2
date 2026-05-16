@@ -42,7 +42,30 @@ class PaymentFragment : Fragment() {
 
         observarViewModel()
 
+        // 1. Extraemos el precio base enviado desde el adaptador
+        val precioBase = arguments?.getFloat("precioTicket") ?: 0.0f
+        val nombreEvento = arguments?.getString("nombreEvento") ?: "Evento Desconocido"
+        val zona = arguments?.getString("zonaTicket") ?: "General"
+        val fila = arguments?.getString("filaTicket") ?: "-"
+        val asiento = arguments?.getString("asientoTicket") ?: "-"
+
+        // 2. CALCULAMOS LAS COMISIONES
+        // Ejemplo: 10% de comisión de tu app + Tasa Stripe (2.9% del precio + 0.30€ fijos)
+        val comisionPlataforma = precioBase * 0.10f
+
+        // El precio real que se cobrará finalmente en la pasarela de Stripe
+        val precioFinalReal = precioBase + comisionPlataforma
+
+        // 3. PINTAMOS TODO DESGLOSADO DE INMEDIATO EN EL CARDVIEW
+        binding.tvPayEventName.text = nombreEvento
+        binding.tvPayTicketDetails.text = "Zona: $zona | Fila: $fila | Asiento: $asiento"
+
+        // Asignamos cada valor a su respectivo TextView nuevo
+        binding.tvPayBasePrice.text = String.format("%.2f€", precioBase)
+        binding.tvPayCommission.text = String.format("%.2f€", comisionPlataforma)
+        binding.tvPayTotalPrice.text = String.format("%.2f€", precioFinalReal)
         binding.btnPagar.setOnClickListener {
+
             // Desactivamos el botón para que no le den dos veces
             binding.btnPagar.isEnabled = false
 
