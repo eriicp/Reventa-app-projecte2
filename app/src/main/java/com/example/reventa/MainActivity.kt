@@ -9,7 +9,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.example.reventa.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.stripe.android.PaymentConfiguration
 import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +23,12 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Inicializar Stripe con tu Clave Pública (¡NO LA SECRETA!)
+        PaymentConfiguration.init(
+            applicationContext,
+            "pk_test_51TOg6YH3agIzzdNNyr5uqUzP1ucPdULMNo1jkVNcc8cTzxL44oDjCKbUOOFtFrhLM7lbDqAXd24Mnn6MjqRJRmIe00thB5OM9j"
+        )
 
         val userPreferences = UserPreferences(this)
         lifecycleScope.launch {

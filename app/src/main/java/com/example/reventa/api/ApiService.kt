@@ -6,6 +6,8 @@ import com.example.reventa.model.CategoriaEvento
 import com.example.reventa.model.Evento
 import com.example.reventa.model.JwtResponse
 import com.example.reventa.model.LoginRequest
+import com.example.reventa.model.PaymentRequest
+import com.example.reventa.model.PaymentResponse
 
 interface ApiService {
 
@@ -25,4 +27,7 @@ interface ApiService {
 
     @GET("api/eventos/proximos")
     suspend fun getProximosEventos(): Response<List<Evento>>
+
+    @POST("api/pagos/comprar")
+    suspend fun iniciarCompra(@Body request: PaymentRequest): Response<PaymentResponse>
 }
