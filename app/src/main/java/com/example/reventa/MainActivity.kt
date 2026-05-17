@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 // Pantallas donde NO queremos menú inferior
-                R.id.paymentFragment, R.id.loginFragment -> {
+                R.id.paymentFragment, R.id.loginFragment, R.id.sellTicketFragment -> {
                     binding.navView.visibility = View.GONE
                 }
                 // En el resto de pantallas (Home, Explore, Sell, Profile, Tickets) SÍ lo mostramos

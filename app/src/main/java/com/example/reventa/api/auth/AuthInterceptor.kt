@@ -14,7 +14,7 @@ class AuthInterceptor(private val userPreferences: UserPreferences) : Intercepto
 
         // CHIVATO: Imprimimos en consola lo que estamos haciendo
         println("--- INTERCEPTOR REVENTA ---")
-        println("URL de la petición: ${chain.request().url()}")
+        println("URL de la petición: ${chain.request().url}")
         println("Token sacado del DataStore: $token")
 
         if (!token.isNullOrEmpty()) {

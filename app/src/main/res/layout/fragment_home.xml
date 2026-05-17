@@ -17,7 +17,7 @@
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Revenda Segura"
+        android:text="Reventa Segura"
         android:textColor="@color/blue"
         android:textStyle="bold"
         />
@@ -182,26 +182,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:cardElevation="8dp"
         android:backgroundTint="#F2F2F4">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:src="@drawable/theater_masks_svgrepo_com"
-                app:tint="@color/blue" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Teatro"
+                android:text="Todos"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="10dp"
-                android:textSize="16dp"/>
-        </LinearLayout>
+                android:textSize="16dp"
+                android:layout_gravity="center"/>
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:id="@+id/cvFestivales"

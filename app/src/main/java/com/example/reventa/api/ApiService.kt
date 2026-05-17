@@ -1,5 +1,6 @@
 package com.example.reventa.api
 
+import com.example.reventa.model.Entrada
 import retrofit2.Response
 import retrofit2.http.*
 import com.example.reventa.model.Evento
@@ -9,6 +10,8 @@ import com.example.reventa.model.PaymentRequest
 import com.example.reventa.model.PaymentResponse
 import com.example.reventa.model.Ticket
 import com.example.reventa.model.UsuarioDto
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 interface ApiService {
 
@@ -39,4 +42,19 @@ interface ApiService {
     suspend fun getTicketsPorEvento(
         @Path("idEvento") idEvento: Long
     ): Response<List<Ticket>>
+
+    @Multipart
+    @POST("api/entradas/vender")
+    suspend fun publicarEntrada(
+        @Part("idEvento") idEvento: RequestBody,
+        @Part("idVendedor") idVendedor: RequestBody,
+        @Part("precio") precio: RequestBody,
+        @Part("zona") zona: RequestBody,
+        @Part("fila") fila: RequestBody,
+        @Part("asiento") asiento: RequestBody,
+        @Part pdf: MultipartBody.Part?
+    ): Response<Void>
+
+    @GET("api/entradas/mis-ventas/{idUsuario}")
+    suspend fun obtenerMisVentas(@Path("idUsuario") idUsuario: Long): Response<List<Entrada>>
 }

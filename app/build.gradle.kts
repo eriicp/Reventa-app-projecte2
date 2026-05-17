@@ -79,18 +79,17 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
 
     // MAS
-    implementation("androidx.activity:activity-ktx:1.8.2") // <--- AÑADE ESTA
+    implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.stripe:stripe-android:20.39.0")
     val composeBom = platform("androidx.compose:compose-bom:2024.02.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
-
-    // 2. Fuerzas a que use estas librerías actualizadas
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material:material")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     coreLibraryDesugaring ("com.android.tools:desugar_jdk_libs:2.0.4")

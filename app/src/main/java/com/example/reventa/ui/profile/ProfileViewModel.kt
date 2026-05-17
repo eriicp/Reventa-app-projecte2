@@ -26,25 +26,6 @@ class ProfileViewModel(
     private val _logoutExitoso = MutableLiveData<Boolean>()
     val logoutExitoso: LiveData<Boolean> = _logoutExitoso
 
-    // Carga los datos desde Spring Boot usando el ID del usuario logueado
-    fun cargarDatosPerfil(idUsuario: Long) {
-        _loading.value = true
-        viewModelScope.launch {
-            try {
-                val response = apiService.getPerfilUsuario(idUsuario)
-                if (response.isSuccessful && response.body() != null) {
-                    _perfil.value = response.body()
-                } else {
-                    _error.value = "Error al obtener datos del servidor"
-                }
-            } catch (e: Exception) {
-                _error.value = "Error de red: ${e.message}"
-            } finally {
-                _loading.value = false
-            }
-        }
-    }
-
     // Borra los tokens locales mediante el AuthRepository
     fun cerrarSesion() {
         viewModelScope.launch {

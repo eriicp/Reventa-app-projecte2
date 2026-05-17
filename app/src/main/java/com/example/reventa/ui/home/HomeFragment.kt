@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         // Los clics de las categorías que arreglamos antes
         binding.cvMusica.setOnClickListener { irACategoria("Música") }
         binding.cvDeportes.setOnClickListener { irACategoria("Deportes") }
-        binding.cvTeatro.setOnClickListener { irACategoria("Teatro") }
+        binding.cvTeatro.setOnClickListener { irACategoria("Todos") }
         binding.cvFestivales.setOnClickListener { irACategoria("Festivales") }
     }
 

@@ -56,9 +56,20 @@ class TicketsFragment : Fragment() {
 
     private fun setupObservers() {
         // Escuchamos cuando el ViewModel recibe la lista de entradas de Spring Boot
-        ticketsViewModel.tickets.observe(viewLifecycleOwner) { listaTickets ->
-            // Se las pasamos al adaptador para que se pinten en la pantalla
-            ticketsAdapter.submitList(listaTickets)
+// Esto estará probablemente en tu setupObservers() o dentro de la llamada a la API
+        ticketsViewModel.tickets.observe(viewLifecycleOwner) { listaEntradas ->
+            if (listaEntradas.isNullOrEmpty()) {
+
+                binding.recyclerViewTickets.visibility = View.GONE
+                binding.layoutEmptyState.visibility = View.VISIBLE
+            } else {
+                // Sí hay entradas: Mostramos la lista y ocultamos el mensaje
+                binding.recyclerViewTickets.visibility = View.VISIBLE
+                binding.layoutEmptyState.visibility = View.GONE
+
+                // Pasamos los datos al adaptador
+                ticketsAdapter.submitList(listaEntradas)
+            }
         }
 
         ticketsViewModel.error.observe(viewLifecycleOwner) { mensajeError ->

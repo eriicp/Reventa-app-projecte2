@@ -10,25 +10,34 @@ import kotlinx.coroutines.launch
 
 class PaymentViewModel(private val apiService: ApiService) : ViewModel() {
 
+    // Variable para enviar el secreto de Stripe al Fragmento
     private val _clientSecret = MutableLiveData<String>()
-    val clientSecret: LiveData<String> = _clientSecret
+    val clientSecret: LiveData<String> get() = _clientSecret
 
+    // Variable para enviar errores
     private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
+    val error: LiveData<String> get() = _error
 
-    fun prepararPago(idEntrada: Long, idComprador: Long) {
+    // Variable para saber si está cargando (y bloquear el botón)
+    private val _cargando = MutableLiveData<Boolean>()
+    val cargando: LiveData<Boolean> get() = _cargando
+
+    fun solicitarIntentoDePago(idEntrada: Long, idComprador: Long) {
         viewModelScope.launch {
+            _cargando.value = true
             try {
-                val request = PaymentRequest(idEntrada, idComprador)
-                val response = apiService.iniciarCompra(request)
+                val peticion = PaymentRequest(idEntrada, idComprador)
+                val respuesta = apiService.iniciarCompra(peticion)
 
-                if (response.isSuccessful && response.body() != null) {
-                    _clientSecret.value = response.body()!!.clientSecret
+                if (respuesta.isSuccessful && respuesta.body() != null) {
+                    _clientSecret.value = respuesta.body()!!.clientSecret
                 } else {
-                    _error.value = "Error al conectar con el servidor"
+                    _error.value = "Error del servidor: ${respuesta.errorBody()?.string()}"
                 }
             } catch (e: Exception) {
-                _error.value = "Error de red: ${e.message}"
+                _error.value = "Fallo de conexión: ${e.localizedMessage}"
+            } finally {
+                _cargando.value = false
             }
         }
     }

@@ -55,4 +55,22 @@
             android:defaultValue="0.0F" />
     </fragment>
 
+    <fragment
+        android:id="@+id/sellTicketFragment"
+        android:name="com.example.reventa.ui.sell.SellTicketFragment"
+        android:label="Publicar Entrada"
+        tools:layout="@layout/fragment_sell_ticket">
+
+        <argument
+            android:name="idEvento"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/misEntradasFragment"
+        android:name="com.example.reventa.ui.sell.MisEntradasFragment"
+        android:label="Mis Entradas"
+        tools:layout="@layout/fragment_mis_entradas" />
+
 </navigation>

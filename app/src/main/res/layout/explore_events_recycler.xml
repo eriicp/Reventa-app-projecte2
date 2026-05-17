@@ -79,35 +79,4 @@
         android:layout_marginStart="30dp"
         />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/CVfeatureLabel"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="10dp"
-        android:backgroundTint="@color/white"
-        app:cardCornerRadius="10dp">
-
-        <TextView
-            android:id="@+id/tvPriceLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
-            android:layout_marginTop="5dp"
-            android:text="DESDE"
-            android:textColor="@color/grey"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvDayLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="5dp"
-            android:text="80€"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
 </androidx.cardview.widget.CardView>
