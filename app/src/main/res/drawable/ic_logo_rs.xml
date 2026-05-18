@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="500"
+    android:viewportHeight="500">
+    
+    <!-- Hexágono exterior con bordes redondeados -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#0055ff"
+        android:strokeWidth="28"
+        android:strokeLineJoin="round"
+        android:pathData="M250,50 L423.2,150 L423.2,350 L250,450 L76.8,350 L76.8,150 Z" />
+    
+    <!-- Letra R geométrica -->
+    <path
+        android:fillColor="#0055ff"
+        android:fillType="evenOdd"
+        android:pathData="M135,350 L135,175 L160,150 L210,150 L235,175 L235,225 L210,250 L163,250 L235,350 L205,350 L163,292 L163,350 Z M163,176 L195,176 L207,188 L207,224 L163,224 Z" />
+    
+    <!-- Letra S geométrica (Estilo facetado igual a la R) -->
+    <path
+        android:fillColor="#0055ff"
+        android:pathData="M365,205 L337,205 L337,190 L325,178 L305,178 L293,190 L293,224 L305,236 L340,236 L365,261 L365,325 L340,350 L290,350 L265,325 L265,295 L293,295 L293,310 L305,322 L325,322 L337,310 L337,276 L325,264 L290,264 L265,239 L265,175 L290,150 L340,150 L365,175 Z" />
+</vector>

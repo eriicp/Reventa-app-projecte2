@@ -40,10 +40,6 @@ class ProfileFragment : Fragment() {
         binding.cvLogout.setOnClickListener {
             profileViewModel.cerrarSesion()
         }
-
-        binding.ibProfileSettings.setOnClickListener {
-            Toast.makeText(requireContext(), "Ajustes próximamente", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun setupObservers() {
