@@ -73,4 +73,10 @@
         android:label="Mis Entradas"
         tools:layout="@layout/fragment_mis_entradas" />
 
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.reventa.ui.login.RegisterFragment"
+        android:label="Crear Cuenta"
+        tools:layout="@layout/fragment_register" />
+
 </navigation>

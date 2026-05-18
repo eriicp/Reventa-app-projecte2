@@ -37,6 +37,12 @@ class LoginFragment : Fragment() {
         val btnLogin = view.findViewById<Button>(R.id.btnLogin)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
 
+        val btnGoToRegister = view.findViewById<Button>(R.id.btnGoToRegister)
+
+        btnGoToRegister.setOnClickListener {
+            findNavController().navigate(R.id.registerFragment)
+        }
+
         // 1. ESCUCHAR LOS CAMBIOS DEL VIEWMODEL
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.loginState.collect { estado ->

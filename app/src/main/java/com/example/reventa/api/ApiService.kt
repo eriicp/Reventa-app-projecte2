@@ -55,6 +55,16 @@ interface ApiService {
         @Part pdf: MultipartBody.Part?
     ): Response<Void>
 
+    @Multipart
+    @POST("api/auth/register")
+    suspend fun registerUser(
+        @Part("nombreCompleto") nombreCompleto: RequestBody,
+        @Part("email") email: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part("dniNie") dniNie: RequestBody,
+        @Part archivoDni: MultipartBody.Part
+    ): Response<Void>
+
     @GET("api/entradas/mis-ventas/{idUsuario}")
     suspend fun obtenerMisVentas(@Path("idUsuario") idUsuario: Long): Response<List<Entrada>>
 }
