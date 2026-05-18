@@ -58,8 +58,9 @@ class RegisterViewModel(private val context: Context) : ViewModel() {
                 // 4. Invocación segura de la API (Sustituye por tu instancia de ApiService)
                 val response = ItemAPI.API(context).registerUser(rbNombre, rbEmail, rbPassword, rbDni, dniPart)
 
-                if (response.isSuccessful) {
-                    _registerState.value = RegisterState.Success
+                if (response.isSuccessful && response.body() != null) {
+                    val urlStripe = response.body()!!.stripeUrl
+                    _registerState.value = RegisterState.Success(urlStripe)
                 } else {
                     val errorMsg = response.errorBody()?.string() ?: "Error desconocido"
                     _registerState.value = RegisterState.Error(errorMsg)

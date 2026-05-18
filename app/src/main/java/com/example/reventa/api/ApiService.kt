@@ -8,6 +8,7 @@ import com.example.reventa.model.LoginRequest
 import com.example.reventa.model.LoginResponse
 import com.example.reventa.model.PaymentRequest
 import com.example.reventa.model.PaymentResponse
+import com.example.reventa.model.RegisterResponse
 import com.example.reventa.model.Ticket
 import com.example.reventa.model.UsuarioDto
 import okhttp3.MultipartBody
@@ -63,7 +64,7 @@ interface ApiService {
         @Part("password") password: RequestBody,
         @Part("dniNie") dniNie: RequestBody,
         @Part archivoDni: MultipartBody.Part
-    ): Response<Void>
+    ): Response<RegisterResponse>
 
     @GET("api/entradas/mis-ventas/{idUsuario}")
     suspend fun obtenerMisVentas(@Path("idUsuario") idUsuario: Long): Response<List<Entrada>>

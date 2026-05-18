@@ -88,9 +88,15 @@ class RegisterFragment : Fragment() {
                     }
                     is RegisterState.Success -> {
                         progressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "¡Cuenta registrada con éxito!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "Iniciando configuración de pagos...", Toast.LENGTH_LONG).show()
+
+                        // 1. Abrimos el navegador con el link oficial de Stripe
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(estado.stripeUrl))
+                        startActivity(browserIntent)
+
+                        // 2. Limpiamos y volvemos al login
                         viewModel.resetState()
-                        findNavController().popBackStack() // Cierra el fragmento y vuelve al Login
+                        findNavController().popBackStack()
                     }
                     is RegisterState.Error -> {
                         progressBar.visibility = View.GONE

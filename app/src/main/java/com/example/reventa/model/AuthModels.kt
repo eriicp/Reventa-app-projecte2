@@ -11,3 +11,7 @@ data class LoginResponse(
     val idUsuario: Long
 )
 
+data class RegisterResponse(
+    val message: String?,
+    val stripeUrl: String
+)
